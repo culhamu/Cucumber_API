@@ -8,6 +8,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.JSONObject;
 import pojos.Pojo_RegisterCustomer;
+import utilities.Authentication;
 import utilities.ConfigReader;
 
 import static io.restassured.RestAssured.given;
@@ -106,6 +107,18 @@ public class CommonAPI {
                 .when().body(requestBodyJson.toString())
                 .header("Accept","application/json")
                 .post(fullPath);
+
+       response.prettyPrint();
+    }
+
+    @Then("AllCountries icin Get request gonderilir")
+    public void allcountriesIcinGetRequestGonderilir() {
+
+        Response response=given().spec(HooksAPI.spec).headers("Authorization","Bearer "+ Authentication.generateToken())
+                .contentType(ContentType.JSON)
+                .header("Accept","application/json")
+                .when()
+                .get(fullPath);
 
         response.prettyPrint();
     }
