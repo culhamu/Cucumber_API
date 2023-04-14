@@ -1,10 +1,12 @@
 package stepDefinitions.api;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import hooks.api.HooksAPI;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.json.JSONObject;
 import pojos.Pojo_RegisterCustomer;
 import utilities.ConfigReader;
 
@@ -15,6 +17,8 @@ public class CommonAPI {
    public static String fullPath;
 
    public static Pojo_RegisterCustomer requestBody;
+
+   public static JSONObject requestBodyJson;
 
     @Given("Api kullanicisi {string} path parametrelerini set eder")
     public void api_kullanicisi_path_parametrelerini_set_eder(String rawPath) {
@@ -77,4 +81,32 @@ public class CommonAPI {
 
     }
 
+
+
+    @Then("Login icin gerekli {string} ve {string} girilir")
+    public void loginIcinGerekliVeHazirla(String email, String password) {
+
+
+        /*
+        {
+    "email": "admin135@trendlifebuy.com",
+    "password": "Trendlife123"
+}
+         */
+
+        requestBodyJson=new JSONObject();
+        requestBodyJson.put("email",ConfigReader.getProperty(email));
+        requestBodyJson.put("password",ConfigReader.getProperty(password));
+    }
+
+    @Then("Login icin Post request gonderilir")
+    public void loginIcinPostRequestGonderilir() {
+
+        Response response=given().spec(HooksAPI.spec).contentType(ContentType.JSON)
+                .when().body(requestBodyJson.toString())
+                .header("Accept","application/json")
+                .post(fullPath);
+
+        response.prettyPrint();
+    }
 }
