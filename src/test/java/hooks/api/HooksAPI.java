@@ -9,7 +9,7 @@ public class HooksAPI {
 
     public static RequestSpecification spec;
 
-@Before
+    @Before
     public void setupApi(){
 
     spec=new RequestSpecBuilder().setBaseUri(ConfigReader.getProperty("base_url")).build();
