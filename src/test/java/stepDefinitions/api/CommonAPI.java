@@ -2,18 +2,29 @@ package stepDefinitions.api;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import hooks.api.HooksAPI;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.JSONObject;
+import org.junit.Assert;
+import pojos.Pojo_BodyDummy;
+import pojos.Pojo_DataDummy;
 import pojos.Pojo_RegisterCustomer;
 import utilities.Authentication;
 import utilities.ConfigReader;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
 
 public class CommonAPI {
+
+    public static Pojo_DataDummy dataDummy;
+
+    public static Pojo_BodyDummy bodyDummy;
+
+    public static Pojo_BodyDummy requestBody2;
 
    public static String fullPath;
 
@@ -121,5 +132,52 @@ public class CommonAPI {
                 .get(fullPath);
 
         response.prettyPrint();
+    }
+
+    //{
+    //"status": "success",
+    //"data": {
+    //"id": 3,
+    //"employee_name": "Ashton Cox",
+    //"employee_salary": 86000,
+    //"employee_age": 66,
+    //"profile_image": ""
+    //},
+    //"message": "Successfully! Record has been fetched."
+    //}
+
+
+    @Then("Donen response'i kaydet")
+    public void donenResponseIKaydet() {
+
+        Response response=given().spec(HooksAPI.spec).contentType(ContentType.JSON)
+                .when()
+                .get(fullPath);
+
+        response.prettyPrint();
+       requestBody2=response.as(Pojo_BodyDummy.class);
+    }
+
+
+    @And("Response body ile expected body karsilastir")
+    public void responseBodyIleExpectedBodyKarsilastir() {
+
+       assertEquals(bodyDummy.getStatus(),requestBody2.getStatus());
+      // assertEquals(bodyDummy.getDataDummy().getId(),requestBody2.getDataDummy().getId());
+       assertEquals(bodyDummy.getDataDummy().getEmployee_age(),requestBody2.getDataDummy().getEmployee_age());
+       assertEquals(bodyDummy.getDataDummy().getEmployee_name(),requestBody2.getDataDummy().getEmployee_name());
+       assertEquals(bodyDummy.getDataDummy().getEmployee_salary(),requestBody2.getDataDummy().getEmployee_salary());
+       assertEquals(bodyDummy.getDataDummy().getProfile_image(),requestBody2.getDataDummy().getProfile_image());
+       assertEquals(bodyDummy.getMessage(),requestBody2.getMessage());
+
+    }
+
+
+    @Then("Response body icin gerekli Request Body {string}, {int}, {string}, {int} , {int} , {string}, {string}  hazirla")
+    public void responseBodyIcinGerekliRequestBodyHazirla(String status, int id, String employee_name, int employee_salary, int employee_age, String profile_image, String message) {
+        dataDummy=new Pojo_DataDummy(id,employee_name,employee_salary,employee_age,profile_image);
+
+        bodyDummy=new Pojo_BodyDummy(status,dataDummy,message);
+
     }
 }

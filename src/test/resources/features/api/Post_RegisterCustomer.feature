@@ -1,5 +1,5 @@
 
- @API
+
   Feature: Used to create a new user
 
     Scenario: Success Response
