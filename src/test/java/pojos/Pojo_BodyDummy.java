@@ -26,7 +26,7 @@ public class Pojo_BodyDummy {
     //}
 
     private String status;
-    private Pojo_DataDummy dataDummy;
+    private Pojo_DataDummy data;
 
     private String message;
 }

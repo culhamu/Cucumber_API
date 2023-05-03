@@ -155,7 +155,9 @@ public class CommonAPI {
                 .get(fullPath);
 
         response.prettyPrint();
-       requestBody2=response.as(Pojo_BodyDummy.class);
+        System.out.println(bodyDummy.toString());
+        requestBody2=response.as(Pojo_BodyDummy.class);
+
     }
 
 
@@ -164,10 +166,10 @@ public class CommonAPI {
 
        assertEquals(bodyDummy.getStatus(),requestBody2.getStatus());
       // assertEquals(bodyDummy.getDataDummy().getId(),requestBody2.getDataDummy().getId());
-       assertEquals(bodyDummy.getDataDummy().getEmployee_age(),requestBody2.getDataDummy().getEmployee_age());
-       assertEquals(bodyDummy.getDataDummy().getEmployee_name(),requestBody2.getDataDummy().getEmployee_name());
-       assertEquals(bodyDummy.getDataDummy().getEmployee_salary(),requestBody2.getDataDummy().getEmployee_salary());
-       assertEquals(bodyDummy.getDataDummy().getProfile_image(),requestBody2.getDataDummy().getProfile_image());
+       assertEquals(bodyDummy.getData().getEmployee_age(),requestBody2.getData().getEmployee_age());
+       assertEquals(bodyDummy.getData().getEmployee_name(),requestBody2.getData().getEmployee_name());
+       assertEquals(bodyDummy.getData().getEmployee_salary(),requestBody2.getData().getEmployee_salary());
+       assertEquals(bodyDummy.getData().getProfile_image(),requestBody2.getData().getProfile_image());
        assertEquals(bodyDummy.getMessage(),requestBody2.getMessage());
 
     }
