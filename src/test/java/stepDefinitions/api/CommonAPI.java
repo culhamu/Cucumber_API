@@ -199,8 +199,10 @@ public class CommonAPI {
 
 
         Response response=given().spec(HooksAPI.spec).contentType(ContentType.JSON)
-                .when().body(expectedBody)
-                .post(fullPath+"/?key="+ConfigReader.getProperty("trello_api_key")+" &token="+ConfigReader.getProperty("trello_token")+"&name=API2 ");
+                .headers("key","698916d06422f4298d917f6890694265","token","ATTA5d0ac97bc9884d7bf52411cf12a0126a2b50d2943dd8b82bec82f3e91566eb9aB826F723","name","API2")
+                .when()
+                .get(fullPath);
+        response.prettyPrint();
         responseBody=response.as(Pojo_TrelloBody.class);
 
     }
@@ -208,5 +210,15 @@ public class CommonAPI {
     @Then("donen response’un expected body’ye sahip oldugunu test eder")
     public void donenResponseUnExpectedBodyYeSahipOldugunuTestEder() {
 
+    }
+
+    @Then("response sorgusu olusturulur")
+    public void responseSorgusuOlusturulur() {
+
+        Response response=given().header("Accept","application/json")
+                .when()
+                .get(ConfigReader.getProperty("son"));
+        response.prettyPrint();
+        System.out.println(response.getStatusCode());
     }
 }
