@@ -264,4 +264,15 @@ public class CommonAPI {
         response.prettyPrint();
 
     }
+
+    @Then("get sorgusunu olusturur")
+    public void getSorgusunuOlusturur() {
+
+        Response response = given().spec(HooksAPI.spec).queryParam("api_key","MRUnIoWBLClekvZNymgUKl9dn2HmN7Kw7f0KmIb6")
+                .when().get(fullPath);
+
+        response.prettyPrint();
+
+
+    }
 }
