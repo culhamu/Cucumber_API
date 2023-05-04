@@ -13,7 +13,11 @@ import pojos.*;
 import utilities.Authentication;
 import utilities.ConfigReader;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.port;
 import static org.junit.Assert.assertEquals;
 
 public class CommonAPI {
@@ -43,6 +47,8 @@ public class CommonAPI {
         String[] paths=rawPath.split("/");//["api","register"]
 
 
+        System.out.println(Arrays.toString(paths));
+
         StringBuilder tempPath=new StringBuilder("{");
 
         for (int i = 0; i <paths.length ; i++) {
@@ -61,6 +67,8 @@ public class CommonAPI {
         tempPath.deleteCharAt(tempPath.lastIndexOf("/"));
 
         fullPath=tempPath.toString();//  /{pp0}/{pp1}/{pp2}
+
+        System.out.println(fullPath);
 
     }
 
@@ -220,5 +228,40 @@ public class CommonAPI {
                 .get(ConfigReader.getProperty("son"));
         response.prettyPrint();
         System.out.println(response.getStatusCode());
+    }
+
+    @Then("Query paramlar olusturulur")
+    public void queryParamlarOlusturulur() {
+
+        String bodyString = "{\n" +
+                "    \"cover\": {\n" +
+                "        \"idAttachment\": null,\n" +
+                "        \"color\": \"yellow\",\n" +
+                "        \"idUploadedBackground\": null,\n" +
+                "        \"size\": \"full\",\n" +
+                "        \"brightness\": \"light\",\n" +
+                "        \"idPlugin\": null\n" +
+                "    }\n" +
+                "}";
+
+        JSONObject cover = new JSONObject();
+        cover.put("idAttachment", JSONObject.NULL);
+        cover.put("color", "black");
+        cover.put("idUploadedBackground", JSONObject.NULL);
+        cover.put("size", "full");
+        cover.put("brightness", "light");
+        cover.put("idPlugin", JSONObject.NULL);
+
+        JSONObject body = new JSONObject();
+        body.put("cover", cover);
+
+        Response response = given().spec(HooksAPI.spec).contentType(ContentType.JSON)
+                .queryParams("key","698916d06422f4298d917f6890694265","token","ATTA5d0ac97bc9884d7bf52411cf12a0126a2b50d2943dd8b82bec82f3e91566eb9aB826F723","name","APITestCard2")
+                .when()
+                .body(bodyString)
+                .put(fullPath);
+
+        response.prettyPrint();
+
     }
 }
